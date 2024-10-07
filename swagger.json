@@ -198,8 +198,6 @@
         }
       }
     },
-  
-  
     "/todo-tasks": {
       "get": {
         "summary": "Get all TodoTasks",
@@ -381,6 +379,120 @@
           }
         }
       }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Authenticate a user and retrieve a JWT token",
+        "description": "Authenticate user credentials and provide a JWT token for authorized access.",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "description": "User login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully authenticated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials or missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/signup": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Create a new user account with the provided details.",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "description": "User registration details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors or user already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Retrieve authenticated user's data",
+        "description": "Fetch the details of the authenticated user.",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSignup" 
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -457,6 +569,79 @@
             "example": false
           }
         }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          }
+        },
+        "example": {
+          "email": "user@example.com",
+          "password": "StrongP@ssw0rd!"
+        }
+      },
+      "UserSignup": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full name of the user"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          }
+        },
+        "example": {
+          "name": "John Doe",
+          "email": "john.doe@example.com",
+          "password": "StrongP@ssw0rd!"
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication"
+          }
+        },
+        "example": {
+          "email": "user@example.com",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          }
+        },
+        "example": {
+          "error": "Invalid credentials"
+        }
       }
     },
     "securitySchemes": {
@@ -473,4 +658,3 @@
     }
   ]
 }
-
