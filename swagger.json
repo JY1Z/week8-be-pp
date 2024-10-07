@@ -197,6 +197,190 @@
           }
         }
       }
+    },
+  
+  
+    "/todo-tasks": {
+      "get": {
+        "summary": "Get all TodoTasks",
+        "tags": ["TodoTasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of TodoTasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TodoTask"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new TodoTask",
+        "tags": ["TodoTasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoTaskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "TodoTask created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoTask"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/todo-tasks/{id}": {
+      "get": {
+        "summary": "Get a TodoTask by ID",
+        "tags": ["TodoTasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "TodoTask ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TodoTask found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoTask"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "TodoTask not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a TodoTask by ID",
+        "tags": ["TodoTasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "TodoTask ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "TodoTask deleted"
+          },
+          "404": {
+            "description": "TodoTask not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a TodoTask by ID",
+        "tags": ["TodoTasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "TodoTask ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoTaskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "TodoTask updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoTask"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "TodoTask not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -221,6 +405,58 @@
             "example": "$299"
           }
         }
+      },
+      "TodoTask": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "61616c156f1c1a00164f8f52"
+          },
+          "title": {
+            "type": "string",
+            "example": "Buy groceries"
+          },
+          "description": {
+            "type": "string",
+            "example": "Buy milk, eggs, and bread"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-10-12T00:00:00.000Z"
+          },
+          "completed": {
+            "type": "boolean",
+            "example": false
+          },
+          "user_id": {
+            "type": "string",
+            "example": "60a2fcd8776400001c4d3b15"
+          }
+        }
+      },
+      "TodoTaskInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Buy groceries"
+          },
+          "description": {
+            "type": "string",
+            "example": "Buy milk, eggs, and bread"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-10-12T00:00:00.000Z"
+          },
+          "completed": {
+            "type": "boolean",
+            "example": false
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -237,3 +473,4 @@
     }
   ]
 }
+
