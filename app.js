@@ -7,10 +7,16 @@ const todoTaskRouter = require("./routers/todoTaskRouter");
 const userRouter = require("./routers/userRouter");
 const tourRouter = require("./routers/tourRouter");
 
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger.json"); 
+
 // express app
 const app = express();
 
 connectDB();
+
+// Serve Swagger documentation
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // middleware
 app.use(cors());
